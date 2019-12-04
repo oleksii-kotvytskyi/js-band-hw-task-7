@@ -1,0 +1,101 @@
+:root {
+  --footer: 4.55rem;
+  --header: 4.55rem;
+}
+.todoList {
+  margin-top: 6rem;
+  margin-bottom: 3rem;
+  min-height: calc(100vh - 6rem - 3rem - var(--footer) - var(--header));
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  margin-left: 40px;
+}
+
+.todoItem {
+  display: none;
+}
+.todoItem.show {
+  display: block;
+  position: relative;
+  width: 250px;
+  height: 300px;
+  margin-bottom: 20px;
+  margin-right: 30px;
+  word-wrap: break-word;
+}
+
+.todoItem.show .card-header {
+  padding-left: 20px;
+  height: 55px;
+  overflow: auto;
+  font-size: 18px;
+}
+.todoItem.show .card-body .card-text {
+  margin: 0;
+  height: 140px;
+  overflow: auto;
+}
+.todoItem.show .card-footer {
+  position: absolute;
+  bottom: 0;
+  padding: 0;
+  width: 100%;
+}
+.todoItem.show .card-footer > p {
+  margin: 0;
+  /* padding-top: 15px; */
+  line-height: 2;
+}
+.dropdownEditTodo {
+  position: relative;
+  width: 40px;
+}
+.dropdownEditTodo > button {
+  width: 100%;
+  background-color: white;
+  border: 1px solid black;
+  border-radius: 10px;
+  height: 25px;
+  outline: none;
+  margin-top: 9px;
+}
+.dropdownEditTodo > button:hover {
+  background-color: lightgreen;
+}
+.dropdownEditTodo > ul {
+  display: none;
+}
+.dropdownEditTodo.open > ul {
+  display: block;
+  position: absolute;
+  top: 37px;
+  left: -40px;
+  width: 80px;
+  border: 1px solid grey;
+  text-align: center;
+  background-color: white;
+  z-index: 2;
+  color: black;
+}
+.dropdownEditTodo.open > ul > li:hover {
+  cursor: pointer;
+  background-color: lightgreen;
+}
+
+.bg-success {
+  animation: doneAnimation 1.5s ease;
+}
+
+.bg-secondary {
+  animation: doneAnimation 1.5s ease;
+}
+
+@keyframes doneAnimation {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
