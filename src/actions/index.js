@@ -1,7 +1,6 @@
 export const CREATE_TODO = 'CREATE_TODO';
 export const REMOVE_TODO = 'REMOVE_TODO';
 export const TOGGLE_TODO = 'TOGGLE_TODO';
-export const FILTER_TODO = 'FILTER_TODO';
 export const EDIT_TODO = 'EDIT_TODO';
 export const SHOW_MODAL = 'SHOW_MODAL';
 export const CLEAR_EDIT_ITEM = 'CLEAR_EDIT_ITEM';
@@ -39,13 +38,6 @@ export const toggleTodo = id => ({
   type: TOGGLE_TODO,
   payload: {
     id,
-  },
-});
-
-export const filterTodo = filter => ({
-  type: FILTER_TODO,
-  payload: {
-    filter,
   },
 });
 
