@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { editTodo, removeTodo, toggleTodo } from '../../../actions';
 
 class TodoItem extends Component {
   constructor() {
@@ -18,7 +20,12 @@ class TodoItem extends Component {
   }
 
   render() {
-    const { todo, editTodo, toggleDone, deleteTodo } = this.props;
+    const {
+      todo,
+      editTodoInComponent,
+      removeTodoInComponent,
+      toggleTodoInComponent,
+    } = this.props;
     const { dropdownOpen } = this.state;
     return (
       <div
@@ -44,7 +51,7 @@ class TodoItem extends Component {
             <ul>
               <li
                 onClick={() => {
-                  toggleDone(todo);
+                  toggleTodoInComponent(todo.id);
                   this.handleOpen();
                 }}
               >
@@ -52,7 +59,7 @@ class TodoItem extends Component {
               </li>
               <li
                 onClick={() => {
-                  editTodo(todo);
+                  editTodoInComponent(todo);
                   this.handleOpen();
                 }}
               >
@@ -60,7 +67,7 @@ class TodoItem extends Component {
               </li>
               <li
                 onClick={() => {
-                  deleteTodo(todo);
+                  removeTodoInComponent(todo.id);
                 }}
               >
                 delete
@@ -81,9 +88,15 @@ TodoItem.propTypes = {
     description: PropTypes.string.isRequired,
     priority: PropTypes.string.isRequired,
   }).isRequired,
-  editTodo: PropTypes.func.isRequired,
-  toggleDone: PropTypes.func.isRequired,
-  deleteTodo: PropTypes.func.isRequired,
+  editTodoInComponent: PropTypes.func.isRequired,
+  removeTodoInComponent: PropTypes.func.isRequired,
+  toggleTodoInComponent: PropTypes.func.isRequired,
 };
 
-export default TodoItem;
+const mapDispatchToProps = dispatch => ({
+  editTodoInComponent: todo => dispatch(editTodo(todo)),
+  toggleTodoInComponent: id => dispatch(toggleTodo(id)),
+  removeTodoInComponent: id => dispatch(removeTodo(id)),
+});
+
+export default connect(null, mapDispatchToProps)(TodoItem);

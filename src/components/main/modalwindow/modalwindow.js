@@ -1,7 +1,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import Dropdown from '../../helpers/dropdown';
 import './style.css';
+import {
+  createTodo,
+  showModal,
+  editTodo,
+  clearEditItem,
+} from '../../../actions';
 
 class ModalWindow extends Component {
   constructor(props) {
@@ -15,6 +22,7 @@ class ModalWindow extends Component {
       description: '',
       priority: 'high',
       id: null,
+      done: false,
     };
 
     this.visibleToggle = this.visibleToggle.bind(this);
@@ -29,12 +37,13 @@ class ModalWindow extends Component {
     const { editItem } = this.props;
     if (editItem) {
       if (prevProps.editItem !== editItem) {
-        const { title, description, priority, id } = editItem;
+        const { title, description, priority, id, done } = editItem;
         this.setState({
           title,
           description,
           priority,
           id,
+          done,
         });
       }
     }
@@ -50,21 +59,36 @@ class ModalWindow extends Component {
   }
 
   handleSubmit(event) {
-    const { title, description, priority, id } = this.state;
-    const { creatTodo, editTodo, editItem } = this.props;
+    const { title, description, priority, done, id } = this.state;
+    const createObject = {
+      title,
+      description,
+      priority,
+      done,
+    };
+    const {
+      handleShowModal,
+      creatTodoInComp,
+      editTodoInComponent,
+      editItem,
+      clearEditItemInComponent,
+    } = this.props;
+
     event.preventDefault();
     if (!editItem) {
-      creatTodo({ title, description, priority });
+      creatTodoInComp(createObject);
     } else {
-      editTodo({ title, description, priority, id });
+      editTodoInComponent({ ...createObject, id });
+      clearEditItemInComponent();
     }
 
+    handleShowModal(false);
     this.resetData();
   }
 
   handleCancel() {
     const { handleShowModal } = this.props;
-    handleShowModal();
+    handleShowModal(false);
     this.resetData();
   }
 
@@ -75,15 +99,13 @@ class ModalWindow extends Component {
   }
 
   resetData() {
-    const { resetItem } = this.props;
     this.setState({
       title: '',
       description: '',
       priority: 'high',
-      edit: false,
       id: null,
+      done: false,
     });
-    resetItem();
   }
 
   visibleToggle(item) {
@@ -163,11 +185,24 @@ ModalWindow.propTypes = {
     description: PropTypes.string.isRequired,
     priority: PropTypes.string.isRequired,
     id: PropTypes.number.isRequired,
+    done: PropTypes.bool.isRequired,
   }),
-  creatTodo: PropTypes.func.isRequired,
-  editTodo: PropTypes.func.isRequired,
   handleShowModal: PropTypes.func.isRequired,
-  resetItem: PropTypes.func.isRequired,
+  creatTodoInComp: PropTypes.func.isRequired,
+  editTodoInComponent: PropTypes.func.isRequired,
+  clearEditItemInComponent: PropTypes.func.isRequired,
 };
 
-export default ModalWindow;
+const mapStateToProps = state => ({
+  show: state.todos.showModal,
+  editItem: state.todos.editItem,
+});
+
+const mapDispatchToProps = dispatch => ({
+  creatTodoInComp: todo => dispatch(createTodo(todo)),
+  editTodoInComponent: todo => dispatch(editTodo(todo)),
+  handleShowModal: value => dispatch(showModal(value)),
+  clearEditItemInComponent: () => dispatch(clearEditItem()),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(ModalWindow);

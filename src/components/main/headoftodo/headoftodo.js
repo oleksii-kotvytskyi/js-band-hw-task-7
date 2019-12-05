@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import DropDown from '../../helpers/dropdown';
+import { showModal } from '../../../actions';
 
 class HeadOfTodo extends Component {
   constructor() {
@@ -105,7 +107,7 @@ class HeadOfTodo extends Component {
           className="btn btn-dark col-2 p-0"
           style={{ height: '40px' }}
           type="button"
-          onClick={() => handleShowModal()}
+          onClick={() => handleShowModal(true)}
         >
           Сreate
         </button>
@@ -119,4 +121,8 @@ HeadOfTodo.propTypes = {
   handleSorted: PropTypes.func.isRequired,
 };
 
-export default HeadOfTodo;
+const mapDispatchToProps = dispatch => ({
+  handleShowModal: value => dispatch(showModal(value)),
+});
+
+export default connect(null, mapDispatchToProps)(HeadOfTodo);

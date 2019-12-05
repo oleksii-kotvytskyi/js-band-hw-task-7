@@ -1,29 +1,22 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import TodoItem from './todoitem';
 import './style.css';
 
 function TodoList(props) {
-  const { todolist, editTodo, toggleDone, deleteTodo } = props;
+  const { todos } = props;
   return (
     <ul className="todoList">
-      {todolist.map(todo => {
-        return (
-          <TodoItem
-            key={todo.id}
-            todo={todo}
-            editTodo={editTodo}
-            toggleDone={toggleDone}
-            deleteTodo={deleteTodo}
-          />
-        );
+      {todos.map(todo => {
+        return <TodoItem key={todo.id} todo={todo} />;
       })}
     </ul>
   );
 }
 
 TodoList.propTypes = {
-  todolist: PropTypes.arrayOf(
+  todos: PropTypes.arrayOf(
     PropTypes.shape({
       done: PropTypes.bool.isRequired,
       id: PropTypes.number.isRequired,
@@ -32,9 +25,6 @@ TodoList.propTypes = {
       priority: PropTypes.string.isRequired,
     }),
   ).isRequired,
-  editTodo: PropTypes.func.isRequired,
-  toggleDone: PropTypes.func.isRequired,
-  deleteTodo: PropTypes.func.isRequired,
 };
 
-export default TodoList;
+export default connect(state => ({ todos: state.todos.todos }))(TodoList);
