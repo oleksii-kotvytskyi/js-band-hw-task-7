@@ -18,45 +18,47 @@ const todos = (state = initialState, action) => {
     case CREATE_TODO:
       return {
         ...state,
-        showModal: action.showModal,
+        showModal: action.payload.showModal,
         todos: [
           ...state.todos,
           {
             id: Date.now(),
-            ...action.todo,
+            ...action.payload.todo,
           },
         ],
       };
     case EDIT_TODO:
       return {
         ...state,
-        showModal: action.showModal,
-        editItem: action.todo,
+        showModal: action.payload.showModal,
+        editItem: action.payload.todo,
         todos: state.todos.map(todo =>
-          todo.id === action.todo.id ? { ...action.todo } : todo,
+          todo.id === action.payload.todo.id
+            ? { ...action.payload.todo }
+            : todo,
         ),
       };
     case TOGGLE_TODO:
       return {
         ...state,
         todos: state.todos.map(todo =>
-          todo.id === action.id ? { ...todo, done: !todo.done } : todo,
+          todo.id === action.payload.id ? { ...todo, done: !todo.done } : todo,
         ),
       };
     case REMOVE_TODO:
       return {
         ...state,
-        todos: state.todos.filter(todo => todo.id !== action.id),
+        todos: state.todos.filter(todo => todo.id !== action.payload.id),
       };
     case SHOW_MODAL:
       return {
         ...state,
-        showModal: action.value,
+        showModal: action.payload.value,
       };
     case CLEAR_EDIT_ITEM:
       return {
         ...state,
-        editItem: action.value,
+        editItem: action.payload.value,
       };
     default:
       return state;
