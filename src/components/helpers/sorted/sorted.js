@@ -38,5 +38,4 @@ function sorted(filter, array) {
 
   return copyTodos.sort((x, y) => x.done - y.done);
 }
-
 export default sorted;

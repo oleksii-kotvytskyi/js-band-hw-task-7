@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import DropDown from '../../helpers/dropdown';
-import { showModal } from '../../../actions';
+import { showModal, setVisibilityFilter } from '../../../actions';
 
 class HeadOfTodo extends Component {
   constructor() {
@@ -16,18 +16,13 @@ class HeadOfTodo extends Component {
         open: true,
         name: 'openByPriority',
       },
-      sortBy: {
-        priority: 'all',
-        completed: 'all',
-        searchText: '',
-      },
     };
-    this.visibleChange = this.visibleChange.bind(this);
+    this.changeVisibleFilters = this.changeVisibleFilters.bind(this);
     this.handleClick = this.handleClick.bind(this);
     this.searchByTitle = this.searchByTitle.bind(this);
   }
 
-  visibleChange(item) {
+  changeVisibleFilters(item) {
     this.setState(prevState => ({
       [item.name]: {
         ...prevState[item.name],
@@ -37,46 +32,34 @@ class HeadOfTodo extends Component {
   }
 
   handleClick(e, name) {
-    const { handleSorted } = this.props;
-    const { sortBy } = this.state;
+    const { setFilters, filter } = this.props;
     const value = e.target.innerText;
-    this.setState(prevState => ({
-      sortBy: {
-        ...prevState.sortBy,
-        [name]: value,
-      },
-    }));
+    this.setState({ filter });
 
-    handleSorted({
-      ...sortBy,
+    setFilters({
+      ...filter,
       [name]: value,
     });
   }
 
   searchByTitle(e) {
-    const { handleSorted } = this.props;
-    const { sortBy } = this.state;
+    const { setFilters, filter } = this.props;
     const { value } = e.target;
-    this.setState(prevState => ({
-      sortBy: {
-        ...prevState.sortBy,
-        searchText: value,
-      },
-    }));
+    this.setState({ filter });
 
-    handleSorted({
-      ...sortBy,
+    setFilters({
+      ...filter,
       searchText: value,
     });
   }
 
   render() {
+    const { openByDone, openByPriority } = this.state;
     const {
-      openByDone,
-      openByPriority,
-      sortBy: { priority, completed },
-    } = this.state;
-    const { handleShowModal } = this.props;
+      handleShowModal,
+      filter: { priority, completed },
+    } = this.props;
+
     const priorityItems = ['all', 'high', 'normal', 'low'];
     const doneItems = ['all', 'open', 'done'];
     return (
@@ -92,14 +75,14 @@ class HeadOfTodo extends Component {
         <DropDown
           items={doneItems}
           dropdownInf={openByDone}
-          visibleToggle={this.visibleChange}
+          visibleToggle={this.changeVisibleFilters}
           handleClick={e => this.handleClick(e, 'completed')}
           textValue={completed}
         />
         <DropDown
           items={priorityItems}
           dropdownInf={openByPriority}
-          visibleToggle={this.visibleChange}
+          visibleToggle={this.changeVisibleFilters}
           handleClick={e => this.handleClick(e, 'priority')}
           textValue={priority}
         />
@@ -118,11 +101,20 @@ class HeadOfTodo extends Component {
 
 HeadOfTodo.propTypes = {
   handleShowModal: PropTypes.func.isRequired,
-  handleSorted: PropTypes.func.isRequired,
+  setFilters: PropTypes.func.isRequired,
+  filter: PropTypes.shape({
+    searchText: PropTypes.string.isRequired,
+    priority: PropTypes.string.isRequired,
+    completed: PropTypes.string.isRequired,
+  }).isRequired,
 };
 
 const mapDispatchToProps = dispatch => ({
   handleShowModal: value => dispatch(showModal(value)),
+  setFilters: filter => dispatch(setVisibilityFilter(filter)),
 });
 
-export default connect(null, mapDispatchToProps)(HeadOfTodo);
+export default connect(
+  state => ({ filter: state.filterTodos }),
+  mapDispatchToProps,
+)(HeadOfTodo);

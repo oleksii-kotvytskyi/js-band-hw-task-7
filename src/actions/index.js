@@ -5,6 +5,12 @@ export const FILTER_TODO = 'FILTER_TODO';
 export const EDIT_TODO = 'EDIT_TODO';
 export const SHOW_MODAL = 'SHOW_MODAL';
 export const CLEAR_EDIT_ITEM = 'CLEAR_EDIT_ITEM';
+export const SET_VISIBILITY_FILTER = 'SET_VISIBILITY_FILTER';
+export const SORTY_BY = {
+  searchText: '',
+  priority: 'all',
+  completed: 'all',
+};
 
 export const createTodo = todo => ({
   type: CREATE_TODO,
@@ -40,4 +46,9 @@ export const showModal = value => ({
 export const clearEditItem = () => ({
   type: CLEAR_EDIT_ITEM,
   value: undefined,
+});
+
+export const setVisibilityFilter = filter => ({
+  type: SET_VISIBILITY_FILTER,
+  filter,
 });
