@@ -1,28 +1,63 @@
-import { CREATE_TODO, EDIT_TODO, TOGGLE_TODO, REMOVE_TODO } from '../actions';
+import {
+  CREATE_TODO,
+  EDIT_TODO,
+  TOGGLE_TODO,
+  REMOVE_TODO,
+  SHOW_MODAL,
+  CLEAR_EDIT_ITEM,
+} from '../actions';
 
-const todos = (state = [], action) => {
+const initialState = {
+  todos: [],
+  showModal: false,
+  editItem: undefined,
+};
+
+const todos = (state = initialState, action) => {
   switch (action.type) {
     case CREATE_TODO:
-      return [
+      return {
         ...state,
-        {
-          id: Date.now(),
-          ...action.todo,
-        },
-      ];
+        showModal: action.showModal,
+        todos: [
+          ...state.todos,
+          {
+            id: Date.now(),
+            ...action.todo,
+          },
+        ],
+      };
     case EDIT_TODO:
-      return state.map(todo => {
-        if (todo.id === action.todo.id) {
-          return { ...action.todo };
-        }
-        return todo;
-      });
+      return {
+        ...state,
+        showModal: action.showModal,
+        editItem: action.todo,
+        todos: state.todos.map(todo =>
+          todo.id === action.todo.id ? { ...action.todo } : todo,
+        ),
+      };
     case TOGGLE_TODO:
-      return state.map(todo =>
-        todo.id === action.id ? { ...todo, done: !todo.done } : todo,
-      );
+      return {
+        ...state,
+        todos: state.todos.map(todo =>
+          todo.id === action.id ? { ...todo, done: !todo.done } : todo,
+        ),
+      };
     case REMOVE_TODO:
-      return state.filter(todo => todo.id === action.id);
+      return {
+        ...state,
+        todos: state.todos.filter(todo => todo.id !== action.id),
+      };
+    case SHOW_MODAL:
+      return {
+        ...state,
+        showModal: action.value,
+      };
+    case CLEAR_EDIT_ITEM:
+      return {
+        ...state,
+        editItem: action.value,
+      };
     default:
       return state;
   }
