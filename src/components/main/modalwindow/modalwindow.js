@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import Dropdown from '../../helpers/dropdown';
 import './style.css';
+import { createTodo } from '../../../actions';
 
 class ModalWindow extends Component {
   constructor(props) {
@@ -170,4 +172,8 @@ ModalWindow.propTypes = {
   resetItem: PropTypes.func.isRequired,
 };
 
-export default ModalWindow;
+const mapDispatchToProps = {
+  creatTodoInComp: createTodo,
+};
+
+export default connect(null, mapDispatchToProps)(ModalWindow);
