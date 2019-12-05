@@ -14,41 +14,57 @@ export const SORTY_BY = {
 
 export const createTodo = todo => ({
   type: CREATE_TODO,
-  showModal: true,
-  todo,
+  payload: {
+    showModal: true,
+    todo,
+  },
 });
 
 export const editTodo = todo => ({
   type: EDIT_TODO,
-  showModal: true,
-  todo,
+  payload: {
+    showModal: true,
+    todo,
+  },
 });
 
 export const removeTodo = id => ({
   type: REMOVE_TODO,
-  id,
+  payload: {
+    id,
+  },
 });
 
 export const toggleTodo = id => ({
   type: TOGGLE_TODO,
-  id,
+  payload: {
+    id,
+  },
 });
 
 export const filterTodo = filter => ({
   type: FILTER_TODO,
-  filter,
+  payload: {
+    filter,
+  },
 });
 
 export const showModal = value => ({
   type: SHOW_MODAL,
-  value,
+  payload: {
+    value,
+  },
 });
 export const clearEditItem = () => ({
   type: CLEAR_EDIT_ITEM,
-  value: undefined,
+  payload: {
+    value: undefined,
+  },
 });
 
 export const setVisibilityFilter = filter => ({
   type: SET_VISIBILITY_FILTER,
-  filter,
+  payload: {
+    filter,
+  },
 });
