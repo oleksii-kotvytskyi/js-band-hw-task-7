@@ -84,11 +84,11 @@
 }
 
 .bg-success {
-  animation: doneAnimation 1.5s ease;
+  animation: doneAnimation 1.3s ease;
 }
 
 .bg-secondary {
-  animation: doneAnimation 1.5s ease;
+  animation: doneAnimation 1.3s ease;
 }
 
 @keyframes doneAnimation {
